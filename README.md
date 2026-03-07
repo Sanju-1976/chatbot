@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GroqChat 🤖⚡
 
-## Getting Started
+A modern, blazing-fast AI chatbot powered by **Groq** (LLaMA 3 70B) and **Firebase**.
 
-First, run the development server:
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 14 (App Router) + TypeScript |
+| Styling | Tailwind CSS + Custom CSS |
+| Auth | Firebase Authentication (Google + Email) |
+| Database | Firebase Firestore (Chat History) |
+| AI Backend | Groq API (LLaMA 3 70B, 8192 tokens) |
+| Deployment | Vercel + Firebase |
+
+## Quick Start
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/Sanju-1976/chatbot.git
+cd chatbot
+npm install
+```
+
+### 2. Firebase Setup
+
+1. Go to [Firebase Console](https://console.firebase.google.com) and create a new project
+2. Enable **Authentication** → Google + Email/Password
+3. Enable **Firestore Database** (start in test mode, then apply rules)
+4. Get your Firebase config from **Project Settings → Your Apps → Web App**
+
+### 3. Groq API Key
+
+1. Go to [console.groq.com](https://console.groq.com) and get your API key
+
+### 4. Environment Variables
+
+Copy the template and fill in your values:
+
+```bash
+cp .env.local.template .env.local
+```
+
+Edit `.env.local`:
+
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=your_api_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+GROQ_API_KEY=your_groq_api_key
+```
+
+### 5. Apply Firestore Rules
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase deploy --only firestore:rules
+```
+
+### 6. Run Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 7. Deploy to Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npx vercel --prod
+```
 
-## Learn More
+Add all environment variables in the Vercel dashboard.
 
-To learn more about Next.js, take a look at the following resources:
+## Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- ⚡ **Ultra-fast** AI responses via Groq's LPU
+- 💬 **Persistent chat history** in Firestore  
+- 🔐 **Google + Email auth** via Firebase
+- 🎨 **Markdown rendering** — code blocks, tables, lists
+- 🌙 **Premium dark UI** with glassmorphism
+- 📱 **Responsive** design
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+├── app/
+│   ├── api/chat/route.ts    # Groq API proxy
+│   ├── chat/page.tsx        # Main chat interface
+│   ├── login/page.tsx       # Auth page
+│   └── page.tsx             # Landing page
+├── components/
+│   ├── ChatSidebar.tsx      # Conversation list
+│   ├── ChatWindow.tsx       # Message display
+│   ├── ChatInput.tsx        # Input area
+│   └── MessageBubble.tsx    # Message component
+├── contexts/
+│   └── AuthContext.tsx      # Firebase auth context
+└── lib/
+    ├── firebase.ts          # Firebase init
+    └── firestore.ts         # DB helpers
+```
