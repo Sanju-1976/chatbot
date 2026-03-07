@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import Groq from "groq-sdk";
 
-const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY!,
-});
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
     try {
@@ -12,6 +9,10 @@ export async function POST(req: NextRequest) {
         if (!messages || !Array.isArray(messages)) {
             return NextResponse.json({ error: "Messages are required" }, { status: 400 });
         }
+
+        // Lazy import to avoid module-level initialization without env vars
+        const Groq = (await import("groq-sdk")).default;
+        const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! });
 
         const completion = await groq.chat.completions.create({
             model: "llama3-70b-8192",

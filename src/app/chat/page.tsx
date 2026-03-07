@@ -3,12 +3,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import ChatSidebar from "@/components/ChatSidebar";
 import ChatWindow from "@/components/ChatWindow";
 import ChatInput from "@/components/ChatInput";
 import { Message, createConversation, getMessages, addMessage, getConversations, Conversation } from "@/lib/firestore";
 
-export default function ChatPage() {
+export const dynamic = "force-dynamic";
+
+function ChatContent() {
     const { user, loading, signOut } = useAuth();
     const router = useRouter();
 
@@ -170,5 +173,13 @@ export default function ChatPage() {
                 <ChatInput onSend={handleSend} disabled={isTyping} />
             </div>
         </div>
+    );
+}
+
+export default function ChatPage() {
+    return (
+        <AuthProvider>
+            <ChatContent />
+        </AuthProvider>
     );
 }

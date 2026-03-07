@@ -3,9 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Link from "next/link";
 
-export default function LoginPage() {
+export const dynamic = "force-dynamic";
+
+function LoginForm() {
     const { signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
     const router = useRouter();
     const [isSignUp, setIsSignUp] = useState(false);
@@ -144,5 +147,13 @@ export default function LoginPage() {
                 </p>
             </div>
         </div>
+    );
+}
+
+export default function LoginPage() {
+    return (
+        <AuthProvider>
+            <LoginForm />
+        </AuthProvider>
     );
 }

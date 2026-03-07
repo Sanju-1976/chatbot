@@ -81,7 +81,7 @@ export default function ChatSidebar({
                             borderRadius: 10, cursor: "pointer", marginBottom: 2,
                             background: activeConvId === conv.id ? "var(--bg-hover)" : "transparent",
                             border: activeConvId === conv.id ? "1px solid rgba(124,58,237,0.3)" : "1px solid transparent",
-                            transition: "all 0.15s", group: "true"
+                            transition: "all 0.15s"
                         }}
                         onMouseEnter={(e) => {
                             if (activeConvId !== conv.id)
