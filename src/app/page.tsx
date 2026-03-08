@@ -17,7 +17,7 @@ export default function HomePage() {
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 18, boxShadow: "0 0 20px rgba(124,58,237,0.5)"
           }}>⚡</div>
-          <span style={{ fontSize: 20, fontWeight: 700, color: "var(--text-primary)" }}>GroqChat</span>
+          <span style={{ fontSize: 20, fontWeight: 700, color: "var(--text-primary)" }}>Sanju's AI</span>
         </div>
         <Link href="/login">
           <button className="btn-primary" style={{ padding: "10px 20px", fontSize: 14 }}>

@@ -3,7 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  title: "GroqChat — AI Chatbot",
+  title: "Sanju's AI — AI Chatbot",
   description: "A modern AI chatbot powered by Groq and Firebase",
 };
 

@@ -59,7 +59,7 @@ export default function ChatInput({ onSend, disabled }: Props) {
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Message GroqChat… (Enter to send, Shift+Enter for newline)"
+                    placeholder="Message Sanju's AI… (Enter to send, Shift+Enter for newline)"
                     disabled={disabled}
                     rows={1}
                     style={{
@@ -90,7 +90,7 @@ export default function ChatInput({ onSend, disabled }: Props) {
                 textAlign: "center", fontSize: 11, color: "var(--text-muted)",
                 marginTop: 10
             }}>
-                GroqChat can make mistakes. Verify important information.
+                Sanju's AI can make mistakes. Verify important information.
             </p>
         </div>
     );

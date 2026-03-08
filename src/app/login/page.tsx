@@ -93,7 +93,7 @@ function LoginForm() {
                         {isSignUp ? "Create Account" : "Welcome Back"}
                     </h1>
                     <p style={{ color: "var(--text-secondary)", marginTop: 6, fontSize: 14 }}>
-                        {isSignUp ? "Start chatting with AI today" : "Sign in to your GroqChat account"}
+                        {isSignUp ? "Start chatting with AI today" : "Sign in to your Sanju's AI account"}
                     </p>
                 </div>
 

@@ -157,7 +157,7 @@ function ChatContent() {
                         background: "linear-gradient(135deg, #7c3aed, #a855f7)",
                         display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14
                     }}>⚡</div>
-                    <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>GroqChat</span>
+                    <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>Sanju's AI</span>
                     <span style={{
                         marginLeft: "auto", fontSize: 12, background: "rgba(124,58,237,0.15)",
                         color: "#c4b5fd", padding: "4px 10px", borderRadius: 100,

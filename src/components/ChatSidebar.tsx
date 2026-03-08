@@ -34,7 +34,7 @@ export default function ChatSidebar({
                     background: "linear-gradient(135deg, #7c3aed, #a855f7)",
                     display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14
                 }}>⚡</div>
-                <span style={{ fontWeight: 700, color: "var(--text-primary)", flex: 1 }}>GroqChat</span>
+                <span style={{ fontWeight: 700, color: "var(--text-primary)", flex: 1 }}>Sanju's AI</span>
                 <button onClick={onToggle} style={{
                     background: "none", border: "none", color: "var(--text-muted)",
                     cursor: "pointer", fontSize: 18, padding: "4px", borderRadius: 6,
