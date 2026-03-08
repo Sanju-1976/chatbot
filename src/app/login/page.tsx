@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { AuthProvider } from "@/contexts/AuthContext";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -151,9 +150,5 @@ function LoginForm() {
 }
 
 export default function LoginPage() {
-    return (
-        <AuthProvider>
-            <LoginForm />
-        </AuthProvider>
-    );
+    return <LoginForm />;
 }

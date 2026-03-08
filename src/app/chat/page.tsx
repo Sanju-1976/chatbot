@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { AuthProvider } from "@/contexts/AuthContext";
 import ChatSidebar from "@/components/ChatSidebar";
 import ChatWindow from "@/components/ChatWindow";
 import ChatInput from "@/components/ChatInput";
@@ -177,9 +176,5 @@ function ChatContent() {
 }
 
 export default function ChatPage() {
-    return (
-        <AuthProvider>
-            <ChatContent />
-        </AuthProvider>
-    );
+    return <ChatContent />;
 }

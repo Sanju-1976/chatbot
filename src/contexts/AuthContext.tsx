@@ -4,13 +4,13 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import {
     User,
     GoogleAuthProvider,
-    signInWithPopup,
+    signInWithRedirect,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut as firebaseSignOut,
     onAuthStateChanged,
 } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { getFirebaseAuth } from "@/lib/firebase";
 
 interface AuthContextType {
     user: User | null;
@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsub = onAuthStateChanged(auth, (u) => {
+        const unsub = onAuthStateChanged(getFirebaseAuth(), (u) => {
             setUser(u);
             setLoading(false);
         });
@@ -37,19 +37,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const signInWithGoogle = async () => {
         const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
+        await signInWithRedirect(getFirebaseAuth(), provider);
     };
 
     const signInWithEmail = async (email: string, password: string) => {
-        await signInWithEmailAndPassword(auth, email, password);
+        await signInWithEmailAndPassword(getFirebaseAuth(), email, password);
     };
 
     const signUpWithEmail = async (email: string, password: string) => {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await createUserWithEmailAndPassword(getFirebaseAuth(), email, password);
     };
 
     const signOut = async () => {
-        await firebaseSignOut(auth);
+        await firebaseSignOut(getFirebaseAuth());
     };
 
     return (

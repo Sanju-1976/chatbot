@@ -10,7 +10,7 @@ import {
     deleteDoc,
     writeBatch,
 } from "firebase/firestore";
-import { db } from "./firebase";
+import { getFirebaseDb } from "./firebase";
 
 export interface Message {
     id?: string;
@@ -27,7 +27,7 @@ export interface Conversation {
 
 // Create a new conversation
 export async function createConversation(userId: string, title: string): Promise<string> {
-    const ref = await addDoc(collection(db, "users", userId, "conversations"), {
+    const ref = await addDoc(collection(getFirebaseDb(), "users", userId, "conversations"), {
         title,
         createdAt: serverTimestamp(),
     });
@@ -37,7 +37,7 @@ export async function createConversation(userId: string, title: string): Promise
 // Get all conversations for a user
 export async function getConversations(userId: string): Promise<Conversation[]> {
     const q = query(
-        collection(db, "users", userId, "conversations"),
+        collection(getFirebaseDb(), "users", userId, "conversations"),
         orderBy("createdAt", "desc")
     );
     const snap = await getDocs(q);
@@ -51,7 +51,7 @@ export async function addMessage(
     message: Omit<Message, "id">
 ): Promise<string> {
     const ref = await addDoc(
-        collection(db, "users", userId, "conversations", conversationId, "messages"),
+        collection(getFirebaseDb(), "users", userId, "conversations", conversationId, "messages"),
         { ...message, createdAt: serverTimestamp() }
     );
     return ref.id;
@@ -63,7 +63,7 @@ export async function getMessages(
     conversationId: string
 ): Promise<Message[]> {
     const q = query(
-        collection(db, "users", userId, "conversations", conversationId, "messages"),
+        collection(getFirebaseDb(), "users", userId, "conversations", conversationId, "messages"),
         orderBy("createdAt", "asc")
     );
     const snap = await getDocs(q);
@@ -72,6 +72,7 @@ export async function getMessages(
 
 // Delete a conversation and all its messages
 export async function deleteConversation(userId: string, conversationId: string) {
+    const db = getFirebaseDb();
     const messagesSnap = await getDocs(
         collection(db, "users", userId, "conversations", conversationId, "messages")
     );

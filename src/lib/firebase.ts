@@ -32,7 +32,17 @@ export function getFirebaseDb(): Firestore {
     return dbInstance;
 }
 
-// Keep named exports for backward compat (only call client-side)
-export const auth = typeof window !== "undefined" ? getFirebaseAuth() : (null as unknown as Auth);
-export const db = typeof window !== "undefined" ? getFirebaseDb() : (null as unknown as Firestore);
+// Lazy proxy exports — always resolve at call time, never cached as null
+export const auth = new Proxy({} as Auth, {
+    get(_target, prop) {
+        return (getFirebaseAuth() as unknown as Record<string | symbol, unknown>)[prop];
+    },
+});
+
+export const db = new Proxy({} as Firestore, {
+    get(_target, prop) {
+        return (getFirebaseDb() as unknown as Record<string | symbol, unknown>)[prop];
+    },
+});
+
 export default getFirebaseApp;
