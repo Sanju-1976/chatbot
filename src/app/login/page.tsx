@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { getFirebaseAuth } from "@/lib/firebase";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -15,10 +17,17 @@ function LoginForm() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [showForgotPassword, setShowForgotPassword] = useState(false);
+    const [resetSent, setResetSent] = useState(false);
+    const [resetLoading, setResetLoading] = useState(false);
+
+    const isInvalidCredentialError = error.includes("invalid-credential") || error.includes("wrong-password") || error.includes("user-not-found");
 
     const handleAuth = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+        setShowForgotPassword(false);
+        setResetSent(false);
         setLoading(true);
         try {
             if (isSignUp) {
@@ -29,6 +38,8 @@ function LoginForm() {
             router.push("/chat");
         } catch (err: unknown) {
             setError((err as Error).message || "Authentication failed");
+            // Auto-show forgot password on bad credentials
+            if (!isSignUp) setShowForgotPassword(true);
         } finally {
             setLoading(false);
         }
@@ -41,6 +52,24 @@ function LoginForm() {
             router.push("/chat");
         } catch (err: unknown) {
             setError((err as Error).message || "Google sign-in failed");
+        }
+    };
+
+    const handleForgotPassword = async () => {
+        if (!email) {
+            setError("Please enter your email address above first.");
+            return;
+        }
+        setResetLoading(true);
+        try {
+            await sendPasswordResetEmail(getFirebaseAuth(), email);
+            setResetSent(true);
+            setError("");
+            setShowForgotPassword(false);
+        } catch (err: unknown) {
+            setError((err as Error).message || "Failed to send reset email.");
+        } finally {
+            setResetLoading(false);
         }
     };
 
@@ -79,9 +108,7 @@ function LoginForm() {
                     Continue with Google
                 </button>
 
-                <div style={{
-                    display: "flex", alignItems: "center", gap: 12, marginBottom: 16
-                }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
                     <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
                     <span style={{ color: "var(--text-muted)", fontSize: 13 }}>or</span>
                     <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
@@ -117,12 +144,23 @@ function LoginForm() {
                         />
                     </div>
 
+                    {/* Error message */}
                     {error && (
                         <div style={{
                             background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)",
                             borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#fca5a5"
                         }}>
-                            {error}
+                            {isInvalidCredentialError ? "Incorrect email or password." : error}
+                        </div>
+                    )}
+
+                    {/* Reset email success */}
+                    {resetSent && (
+                        <div style={{
+                            background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.3)",
+                            borderRadius: 10, padding: "10px 14px", fontSize: 13, color: "#86efac"
+                        }}>
+                            ✅ Password reset email sent to <strong>{email}</strong>. Check your inbox!
                         </div>
                     )}
 
@@ -131,10 +169,28 @@ function LoginForm() {
                     </button>
                 </form>
 
+                {/* Forgot Password — shown after wrong credential error */}
+                {showForgotPassword && !isSignUp && (
+                    <div style={{ textAlign: "center", marginTop: 14 }}>
+                        <button
+                            onClick={handleForgotPassword}
+                            disabled={resetLoading}
+                            style={{
+                                background: "none", border: "none", cursor: "pointer",
+                                color: "#a78bfa", fontSize: 13, fontWeight: 500,
+                                textDecoration: "underline", textUnderlineOffset: 3,
+                                opacity: resetLoading ? 0.6 : 1,
+                            }}
+                        >
+                            {resetLoading ? "Sending reset email..." : "🔑 Forgot Password? Click to send reset email"}
+                        </button>
+                    </div>
+                )}
+
                 <p style={{ textAlign: "center", marginTop: 20, fontSize: 14, color: "var(--text-secondary)" }}>
                     {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
                     <button
-                        onClick={() => { setIsSignUp(!isSignUp); setError(""); }}
+                        onClick={() => { setIsSignUp(!isSignUp); setError(""); setShowForgotPassword(false); setResetSent(false); }}
                         style={{ color: "var(--accent-light)", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
                     >
                         {isSignUp ? "Sign In" : "Sign Up"}
